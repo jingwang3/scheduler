@@ -5,7 +5,7 @@ angular.module('scheduleApp', [])
     $scope.activeUser;
     $scope.userIsEdited = false;
     
-    $http.get('http://test.misaka.us/db_driver/get_people.php').
+    $http.get('/db_driver/get_people.php').
       then(function(response) {
         // this callback will be called asynchronously
         // when the response is available
@@ -40,7 +40,7 @@ angular.module('scheduleApp', [])
     };
     
     $scope.saveUserEdits = function(){
-      $http.post('http://test.misaka.us/db_driver/add_person.php', $scope.activeUser).
+      $http.post('/db_driver/add_person.php', $scope.activeUser).
               then(function(response) {
                 // this callback will be called asynchronously
                 // when the response is available
