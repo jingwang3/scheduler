@@ -18,52 +18,41 @@
       </div>
     </div>
     <hr>
-    <div class="row">
+    <div class="row" ng-if="targetRte">
       <div class="col-sm-6">
         <div class="panel panel-success">
           <div class="panel-heading">
-            <h3 class="panel-title">Pick up<span class="glyphicon glyphicon-user pull-right" aria-hidden="true"></span></h3>
+            <h3 class="panel-title">{{targetRte.pickup.label}}<span class="glyphicon glyphicon-user pull-right" aria-hidden="true">-{{targetRte.driver_name}}</span></h3>
           </div>
           <div class="panel-body">
-            <a href="">Edit</a>
+            <ul>
+              <li ng-repeat="guest in targetRte.pickup.guests">
+                Guest name: <strong>{{guest.name}}</strong> Transit info: <strong>{{guest.transit_info}}</strong>
+              </li>
+            </ul>
+            <a href="" class="btn btn-success" data-toggle="modal" data-target="#myModal" ng-click="setTargetTrip(targetRte.pickup)">Edit</a>
           </div>
         </div>
       </div>
       <div class="col-sm-6">
         <div class="panel panel-warning">
           <div class="panel-heading">
-            <h3 class="panel-title">Drop off</h3>
+            <h3 class="panel-title">Drop off<span class="glyphicon glyphicon-user pull-right" aria-hidden="true">-{{targetRte.driver_name}}</span></h3>
           </div>
           <div class="panel-body">
-            <a href="">Edit</a>
+            <ul>
+              <li ng-repeat="guest in targetRte.dropoff.guests">
+                {{guest.name}}
+              </li>
+            </ul>
+            <a href="" class="btn btn-success" data-toggle="modal" data-target="#myModal" ng-click="setTargetTrip(targetRte.dropoff)">Edit</a>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">{{schedules[currentTimeFrame.y].timeframe}}</h4>
-        </div>
-        <div class="modal-body">
-          <ul>
-            <li ng-repeat="user in currentTimeFrame.users">
-              {{user.name}}
-            </li>
-          </ul>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<?php include 'components/scheduleModal.php'; ?>
 <?php include 'components/footer.php'; ?>
 <script src="js/controller.js"></script>
 </body>
