@@ -12,33 +12,35 @@
 
   <!-- Begin page content -->
   <div class="container-fluid">
-    <div class="page-header">
-      <h1>Sticky footer with fixed navbar</h1>
+    <div class="row">
+      <div class="col-sm-2">
+        <a class="btn btn-primary btn-block" href="#" role="button" ng-repeat="rte in rtes" ng-click="setTargetRte(rte)">{{rte.rte_name}}</a>
+      </div>
     </div>
-    <table class="table table-bordered">
-      <tr class="success">
-        <td>#</td>
-        <td>Mon</td>
-        <td>Tue</td>
-        <td>Wed</td>
-        <td>Thr</td>
-        <td>Fri</td>
-        <td>Sat</td>
-        <td>Sun</td>
-      </tr>
-      <tr ng-repeat="sche in schedules">
-        <td class="text-center">{{sche.timeframe}}</td>
-        <td ng-repeat="time in sche.times track by $index" ng-click="openTimeframe($index, $parent.$index, time)" ng-class="{danger: time==0}">
-          <ul>
-            <li ng-repeat="user in time.users">{{user.name}}</li>
-          </ul>
-        </td>
-      </tr>
-    </table>
+    <hr>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <h3 class="panel-title">Pick up<span class="glyphicon glyphicon-user pull-right" aria-hidden="true"></span></h3>
+          </div>
+          <div class="panel-body">
+            <a href="">Edit</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="panel panel-warning">
+          <div class="panel-heading">
+            <h3 class="panel-title">Drop off</h3>
+          </div>
+          <div class="panel-body">
+            <a href="">Edit</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-
-
-
 
   <!-- Modal -->
   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
