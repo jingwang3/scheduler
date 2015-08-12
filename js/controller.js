@@ -1,126 +1,78 @@
 angular.module('scheduleApp', [])
   .controller('MainController', function($scope) {
+    $scope.view = {name: "home"};
     $scope.rtes = [{
       "rte_id": "11",
       "driver_name": "中国人",
       "rte_name": "山手线",
-      "pickup": {
-        "label": "Pick up",
-        "type": 1,
-        "guests": []
-      },
-      "dropoff": {
-        "label": "Drop off",
-        "type": 2,
-        "guests": []
-      }
+      "day": 1,
+      "passengers": []
     }];
 
     $scope.guests = [{
-      "id": 0,
-      "name": "Jing3",
-      "for_pickup": 0,
-      "for_dropoff": 0
+      "id": "1",
+      "name": "赵日天",
+      "tel": "300011111",
+      "add_1": "魔兽",
+      "add_2": "争霸",
+      "add_3": "dota"
     }, {
-      "id": 1,
-      "name": "Jing1",
-      "for_pickup": 0,
-      "for_dropoff": 0
+      "id": "2",
+      "name": "赵日人",
+      "tel": "300011111",
+      "add_1": "魔兽",
+      "add_2": "争霸",
+      "add_3": "dota"
     }, {
-      "id": 3,
-      "name": "Jing2",
-      "for_pickup": 0,
-      "for_dropoff": 0
-    }]
+      "id": "3",
+      "name": "赵日地",
+      "tel": "300011111",
+      "add_1": "魔兽",
+      "add_2": "争霸",
+      "add_3": "dota"
+    }];
 
-    $scope.targetRte;
-    $scope.filterExp = {};
+    $scope.filterExp = {name:''};
+    $scope.tempPassengers = [];
 
-    $scope.setTargetRte = function(rte) {
+    $scope.setTargetRte = function(rte){
       $scope.targetRte = rte;
     };
-
-    $scope.setTargetTrip = function(trip) {
-      $scope.targetTrip = trip;
-
-      if (trip.type === 1) {
-        $scope.filterExp = {
-          "for_pickup": 0
-        };
-      }
-      else if (trip.type === 2) {
-        $scope.filterExp = {
-          "for_dropoff": 0
-        };
-      }
-    };
-
-    $scope.scheduleGuest = function(trip, guest) {
-      if (trip.type === 1) {
-        guest.for_pickup = 1;
-      }
-      else if (trip.type === 2) {
-        guest.for_dropoff = 1;
-      }
-      trip.guests.push(guest);
-    };
-
-    $scope.removeGuest = function(trip, index, guest) {
-      if (trip.type === 1) {
-        guest.for_pickup = 0;
-      }
-      else if (trip.type === 2) {
-        guest.for_dropoff = 0;
-      }
-      trip.guests.splice(index, 1);
-    };
-
-    $scope.addAll = function(trip) {
-      if (trip.type === 1) {
-        for (var i = 0; i < $scope.guests.length; i++) {
-          if ($scope.guests[i].for_pickup === 0){
-            $scope.scheduleGuest(trip, $scope.guests[i]);
-          }
-        }
-      }
-      else if (trip.type === 2) {
-        for (var i = 0; i < $scope.guests.length; i++) {
-          if ($scope.guests[i].for_dropoff === 0){
-            $scope.scheduleGuest(trip, $scope.guests[i]);
-          }
-        }
-      }
+    
+    $scope.editPassengers = function(psgrs){
+      $scope.tempPassengers = angular.copy(psgrs);
     };
     
-    $scope.removeAll = function(trip) {
-      if (trip.type === 1) {
-        for (var i = 0; i < trip.guests.length; i++) {
-            trip.guests[i].for_pickup = 0;
-        }
-      }
-      else if (trip.type === 2) {
-        for (var i = 0; i < trip.guests.length; i++) {
-            trip.guests[i].for_dropoff = 0;
-        }
-      }
-      trip.guests = [];
-    };
-    
-    $scope.addAllRound = function(trip) {
-      if (trip.type === 1) {
-        for (var i = 0; i < $scope.guests.length; i++) {
-          if ($scope.guests[i].for_dropoff === 1){
-            $scope.scheduleGuest(trip, $scope.guests[i]);
-          }
-        }
-      }
-      else if (trip.type === 2) {
-        for (var i = 0; i < $scope.guests.length; i++) {
-          if ($scope.guests[i].for_pickup === 1){
-            $scope.scheduleGuest(trip, $scope.guests[i]);
-          }
-        }
-      }
+    $scope.addPassenger = function(guest){
+      $scope.tempPassengers.push(angular.copy(guest));
     };
 
+    $scope.removeAllPassengers = function(psgrs){
+      psgrs.splice(0,psgrs.length)
+    };
+    
+    $scope.removePassenger = function(psgrs, index){
+      psgrs.splice(psgrs[index], 1);
+    };
+    
+    $scope.savePassengers = function(psgrs){
+      $scope.targetRte.passengers = psgrs;
+    };
+    
+    $scope.chooseAddress = function(trip, address){
+      trip = address;
+      console.log(trip);
+    };
+    
+    $scope.addRte = function(){
+      
+    };
+    
+    $scope.editRte = function(){
+      $scope.editingRte = {};
+    };
+    
+    $scope.setEditingRte = function(rte){
+      $scope.editingRte = angular.copy(rte);
+    };
   });

@@ -1,0 +1,15 @@
+.clickable{
+    cursor:pointer;
+}
+
+.table-name{
+    min-width: 100px;
+}
+
+.table-phone{
+    min-width: 120px;
+}
+
+.table-transit{
+    min-width: 200px;
+}

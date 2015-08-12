@@ -1,5 +1,6 @@
 angular.module('scheduleApp', [])
   .controller('UserController', function($scope, $http) {
+    $scope.view = {name: "user"};
     $scope.users = [{
       "id": "1",
       "name": "赵日天",
