@@ -19,7 +19,7 @@
         </div>
         <div class="col-sm-7">
             <ul class="list-group">
-                <li class="list-group-item" ng-repeat="(key, value) in selectedUser">
+                <li class="list-group-item" ng-repeat="(key, value) in selectedUser" ng-if="key != 'id'">
                   <strong>{{key}}</strong>: 
                   <input type="text" name="" class="form-control" ng-model="selectedUser[key]"/>
                 </li>

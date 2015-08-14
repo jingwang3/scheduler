@@ -15,8 +15,7 @@
           <li><button type="button" class="btn btn-success navbar-btn" ng-click="addUser()">Add user</button></li>
         </ul>
         <ul class="nav navbar-nav navbar-right" ng-if="view.name == 'home'">
-          <li><button type="button" class="btn btn-success navbar-btn" data-toggle="modal" data-target="#rteEditModal" ng-click="addRte()">Add route</button></li>
-          <li><a href="" data-toggle="modal" data-target="#rteEditModal" ng-click="editRte()">Edit route</a></li>
+          <li><button type="button" class="btn btn-success navbar-btn" data-toggle="modal" data-target="#addRteModal" ng-click="addRte()">Add route</button></li>
           <li><a href="/user.php">Users</a></li>
         </ul>
       </div>

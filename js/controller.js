@@ -36,6 +36,7 @@ angular.module('scheduleApp', [])
     $scope.tempPassengers = [];
 
     $scope.setTargetRte = function(rte){
+      $scope.editingRte = angular.copy(rte);
       $scope.targetRte = rte;
     };
     
@@ -68,11 +69,33 @@ angular.module('scheduleApp', [])
       
     };
     
-    $scope.editRte = function(){
-      $scope.editingRte = {};
+    $scope.setEditingRte = function(rte){
+      $scope.editingRte = rte;
     };
     
-    $scope.setEditingRte = function(rte){
+    $scope.addNewRte = function(){
+      var newRte = {
+        "rte_id": $scope.rtes.length + 1,
+        "driver_name": "new driver",
+        "rte_name": "new route",
+        "day": 1,
+        "passengers": []
+      };
+      
+      $scope.rtes.push(angular.copy(newRte));
+    };
+    
+    $scope.addExistingRte = function(rte){
+      var newRte = angular.copy(rte);
+      newRte.rte_id = $scope.rtes.length + 1;
+      $scope.rtes.push(newRte);
+    };
+    
+    $scope.editRte = function(rte){
       $scope.editingRte = angular.copy(rte);
+    };
+    
+    $scope.saveRte = function(){
+      $scope.targetRte = angular.copy($scope.editingRte);
     };
   });
