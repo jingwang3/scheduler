@@ -8,7 +8,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/">Project name</a>
+        <a class="navbar-brand" href="/app">Project name</a>
       </div>
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right" ng-if="view.name == 'user'">
@@ -16,7 +16,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right" ng-if="view.name == 'home'">
           <li><button type="button" class="btn btn-success navbar-btn" data-toggle="modal" data-target="#addRteModal" ng-click="addRte()">Add route</button></li>
-          <li><a href="/user.php">Users</a></li>
+          <li><a href="/app/user.php">Users</a></li>
         </ul>
       </div>
       <!--/.nav-collapse -->
