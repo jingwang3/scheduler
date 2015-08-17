@@ -19,7 +19,7 @@
     </div>
     <hr>
     <div ng-if="targetRte">
-      <h2>{{targetRte.rte_name}} - {{targetRte.driver_name}} <span class="glyphicon glyphicon-pencil clickable text-primary" data-toggle="modal" data-target="#rteEditModal" ng-click="editRte(targetRte)" aria-hidden="true"></span><span class="glyphicon glyphicon-user pull-right clickable text-success" data-toggle="modal" data-target="#myModal" ng-click="editPassengers(targetRte.passengers)" aria-hidden="true"></span></h2>
+      <h2>{{targetRte.rte_name}} - {{targetRte.driver_name}} <span class="glyphicon glyphicon-pencil clickable text-primary" data-toggle="modal" data-target="#rteEditModal" ng-click="editRte(targetRte)" aria-hidden="true"></span><span class="glyphicon glyphicon-plus pull-right clickable text-success" data-toggle="modal" data-target="#myModal" ng-click="editPassengers(targetRte.passengers)" aria-hidden="true"></span></h2>
       <div class="">
         <table class="table">
           <thead>
