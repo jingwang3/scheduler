@@ -24,9 +24,11 @@
                   <input type="text" name="" class="form-control" ng-model="selectedUser[key]"/>
                 </li>
             </ul>
-            <p class="text-center" ng-if="userIsEdited()">
-                <a href="" class="btn btn-default" ng-click="resetUserEdits()">cancel</a> <a href="" class="btn btn-success" ng-click="saveUserEdits()">save</a>
+            <p class="text-center" ng-if="selectedUser">
+                <a href="" class="btn btn-default" ng-click="resetUserEdits()" ng-if="userIsEdited()">cancel</a> <a href="" class="btn btn-success" ng-click="saveUserEdits()" ng-if="userIsEdited()">save</a>
+                <a href="" class="btn btn-danger" ng-click="removeUser()"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
             </p>
+            
         </div>
     </div>
 </div>

@@ -1,74 +1,142 @@
 angular.module('scheduleApp', [])
-  .controller('MainController', function($scope) {
+  .controller('MainController', function($scope, $http) {
     $scope.view = {name: "home"};
-    $scope.rtes = [{
-      "rte_id": "11",
-      "driver_name": "中国人",
-      "rte_name": "山手线",
-      "day": 1,
-      "passengers": []
-    }];
+    $scope.loadAllRtes = function(){
+      $http.get('/db_driver/get_rte.php').
+        then(function(response) {
+          // this callback will be called asynchronously
+          // when the response is available
+          $scope.rtes = response.data;
+        }, function(response) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          console.log(response.status);
+        });
+    };
 
-    $scope.guests = [{
-      "id": "1",
-      "name": "赵日天",
-      "tel": "300011111",
-      "add_1": "魔兽",
-      "add_2": "争霸",
-      "add_3": "dota"
-    }, {
-      "id": "2",
-      "name": "赵日人",
-      "tel": "300011111",
-      "add_1": "魔兽",
-      "add_2": "争霸",
-      "add_3": "dota"
-    }, {
-      "id": "3",
-      "name": "赵日地",
-      "tel": "300011111",
-      "add_1": "魔兽",
-      "add_2": "争霸",
-      "add_3": "dota"
-    }];
+    $scope.loadAllRtes();
+    
+    $http.get('/db_driver/get_people.php').
+      then(function(response) {
+        // this callback will be called asynchronously
+        // when the response is available
+        $scope.guests = response.data;
+      }, function(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+        console.log(response.status);
+      });   
 
     $scope.filterExp = {name:''};
     $scope.tempPassengers = [];
 
-    $scope.setTargetRte = function(rte){
+    $scope.setTargetRte = function(rte, ind){
       $scope.editingRte = angular.copy(rte);
       $scope.targetRte = rte;
+      $scope.targetRteIndex = ind; 
     };
     
     $scope.editPassengers = function(psgrs){
       $scope.tempPassengers = angular.copy(psgrs);
+      $scope.avaGuests = angular.copy($scope.guests);
     };
     
-    $scope.addPassenger = function(guest){
-      $scope.tempPassengers.push(angular.copy(guest));
+    $scope.guestIsAvailable = function(guest){
+      var flag = true;
+      for(var i = 0; i < $scope.tempPassengers.length; i++){
+          if($scope.tempPassengers[i].pass_id !== undefined){
+              if(guest.id === $scope.tempPassengers[i].pass_id){
+                  flag = false;
+              }  
+          }else if(guest.id === $scope.tempPassengers[i].id){
+                flag = false;  
+          }
+      }
+      return flag;
+    };
+    
+    $scope.addPassenger = function(guest, ind){
+
+            var newGuest = {
+                rte_id: $scope.targetRte.rte_id,
+                pass_id: guest.id
+            };
+          $http.post('/db_driver/rte_add_pass.php', newGuest, {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+            }
+          }).
+          then(function(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+            $scope.tempPassengers.push(angular.copy(guest));
+          }, function(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+          });
+
     };
 
-    $scope.removeAllPassengers = function(psgrs){
-      psgrs.splice(0,psgrs.length)
-    };
+    // $scope.removeAllPassengers = function(psgrs){
+    //     for(var i = 0; i< psgrs.length; i++){
+    //         $scope.removePassenger(psgrs, 0);
+    //     };
+    // };
     
     $scope.removePassenger = function(psgrs, index){
-      psgrs.splice(psgrs[index], 1);
+        var requestObj = {
+            rte_id: $scope.targetRte.rte_id,
+            pass_id: (psgrs[index].pass_id || psgrs[index].id)
+        }
+        
+      $http.post('/db_driver/rte_delete_pass.php', requestObj, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+        }
+      }).
+      then(function(response) {
+        // this callback will be called asynchronously
+        // when the response is available
+        psgrs.splice(index, 1);
+      }, function(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+      });
+      
     };
     
-    $scope.savePassengers = function(psgrs){
-      $scope.targetRte.passengers = psgrs;
+    $scope.savePassengers = function(){
+       $scope.setTargetRte(null);
+       $scope.loadAllRtes();
+    };
+    
+    $scope.updatePassengers = function(passengers){
+        for(var i = 0; i<passengers.length; i++){
+            passengers[i].rte_id = $scope.targetRte.rte_id;
+          $http.post('/db_driver/update_rte_pass_info.php', passengers[i], {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+            }
+          }).
+          then(function(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+          }, function(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+          });            
+        };
+
     };
     
     $scope.chooseAddress = function(trip, address){
       trip = address;
-      console.log(trip);
     };
     
-    $scope.addRte = function(){
-      
+    $scope.isSelected = function(rte) {
+      return $scope.targetRte === rte;
     };
-    
+
     $scope.setEditingRte = function(rte){
       $scope.editingRte = rte;
     };
@@ -76,19 +144,44 @@ angular.module('scheduleApp', [])
     $scope.addNewRte = function(){
       var newRte = {
         "rte_id": $scope.rtes.length + 1,
-        "driver_name": "new driver",
+        "dr_name": "new driver",
         "rte_name": "new route",
         "day": 1,
         "passengers": []
       };
-      
-      $scope.rtes.push(angular.copy(newRte));
+      $http.post('/db_driver/create_rte.php', newRte, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+        }
+      }).
+      then(function(response) {
+        // this callback will be called asynchronously
+        // when the response is available
+        $scope.loadAllRtes();
+      }, function(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+      });
     };
     
     $scope.addExistingRte = function(rte){
-      var newRte = angular.copy(rte);
-      newRte.rte_id = $scope.rtes.length + 1;
-      $scope.rtes.push(newRte);
+        var newRte = {
+            "org_rte_id": rte.rte_id,
+            "day": rte.day
+          };
+      $http.post('/db_driver/duplicate_rte.php', newRte, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+        }
+      }).
+      then(function(response) {
+        // this callback will be called asynchronously
+        // when the response is available
+        $scope.loadAllRtes();
+      }, function(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+      });
     };
     
     $scope.editRte = function(rte){
@@ -96,6 +189,36 @@ angular.module('scheduleApp', [])
     };
     
     $scope.saveRte = function(){
-      $scope.targetRte = angular.copy($scope.editingRte);
+      $http.post('/db_driver/update_rte_info.php', $scope.editingRte, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+        }
+      }).
+      then(function(response) {
+        // this callback will be called asynchronously
+        // when the response is available
+        $scope.targetRte = angular.copy($scope.editingRte);
+      }, function(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+      });
+      
+    };
+    
+    $scope.deleteRte = function(rte){
+      $http.post('/db_driver/delete_rte.php', rte, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+        }
+      }).
+      then(function(response) {
+        // this callback will be called asynchronously
+        // when the response is available
+        $scope.loadAllRtes();
+        $scope.setTargetRte(null);
+      }, function(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+      });
     };
   });
